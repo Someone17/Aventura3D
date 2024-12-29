@@ -21,11 +21,9 @@ public class ProjectileBase : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision collision){
-        /*var enemy = collision.transform.GetComponent<EnemyBase>();
+        var damageable = collision.transform.GetComponent<IDamageable>();
 
-        if(enemy != null){
-            enemy.Damage(damageAmount);
-            Destroy(gameObject, timeToDestroy);
-        }*/
+        if(damageable != null) damageable.Damage(damageAmount);
+        Destroy(gameObject);
     }
 }
