@@ -18,6 +18,18 @@ public class Player : MonoBehaviour
     public KeyCode keyRun = KeyCode.LeftShift;
     public float speedRun = 1.5f;
 
+    [Header("Flash")]
+    public List<FlashColor> flashColor;
+
+    public void Damage(float damage){
+        flashColor.ForEach(i => i.Flash());
+    }
+    
+    public void Damage(float damage, Vector3 dir){
+        
+        Damage(damage);
+    }
+
     void Update(){
         transform.Rotate(0, Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime, 0);
 
