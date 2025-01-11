@@ -1,26 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class EnemySpawn : MonoBehaviour
 {
-    public GameObject enemy;
-    public Transform enemyPos;
-    private float repeatRate = 5;
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
+    [SerializeField] bool destroyOnTriggerEnter;
+    [SerializeField] string tagFilter;
+    [SerializeField] UnityEvent onTriggerEnter;
+    [SerializeField] UnityEvent onTriggerExit;
+    
     public void OnTriggerEnter(Collider other)
     {
-        Invoke("EnemySpawner", 10f);
-        Destroy(gameObject, 70);
-        gameObject.GetComponent<BoxCollider>().enabled = false;
+        if (!String.IsNullOrEmpty(tagFilter) && !other.gameObject.CompareTag(tagFilter)) return;
+        onTriggerEnter.Invoke();
+        if (destroyOnTriggerEnter)
+        {
+            Destroy(gameObject);
+        }
     }
-
-    public void EnemySpawner(){
-        Instantiate(enemy, enemyPos.position, enemyPos.rotation);
+    public void OnTriggerExit(Collider other)
+    {
+        if (!String.IsNullOrEmpty(tagFilter) && !other.gameObject.CompareTag(tagFilter)) return;
+        onTriggerExit.Invoke();
     }
 }
