@@ -6633,7 +6633,6 @@ MonoBehaviour:
   - {fileID: 282399164}
   - {fileID: 971397500}
   - {fileID: 1018752561}
-  - {fileID: 1300908090}
 --- !u!4 &186562851
 Transform:
   m_ObjectHideFlags: 0
