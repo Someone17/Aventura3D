@@ -11,8 +11,11 @@ public class Player : MonoBehaviour
     public float turnSpeed = 1f;
     public float gravity = -9.8f;
     public float jumpSpeed = 15f;
+    public List<Collider> colliders;
 
     private float vSpeed = 0f;
+
+    private bool _alive = true;
 
     [Header("Run Setup")]
     public KeyCode keyRun = KeyCode.LeftShift;
@@ -21,13 +24,52 @@ public class Player : MonoBehaviour
     [Header("Flash")]
     public List<FlashColor> flashColor;
 
-    public void Damage(float damage){
+    [Header("Life")]
+    public UIHealthUpdater uiHealthUpdater;
+    public HealthBase healthBase;
+
+
+    private void OnValidate(){
+        if(healthBase == null) healthBase = GetComponent<HealthBase>();
+    }
+
+    public void Awake(){
+        OnValidate();
+
+        healthBase.OnDamage += Damage;
+        healthBase.OnKill += OnKill;
+    }
+
+    private void OnKill(HealthBase h){
+        if(_alive){
+            _alive = false;
+            animator.SetTrigger("Death");
+            colliders.ForEach(i => i.enabled = false);
+
+            Invoke(nameof(Revive), 3f);
+        }
+    }
+
+    private void Revive(){
+        _alive = true;
+        healthBase.ResetLife();
+        animator.SetTrigger("Revive");
+        Respawn();
+        Invoke(nameof(TurnOnColliders), 1f);
+    }
+
+    private void TurnOnColliders(){
+        colliders.ForEach(i => i.enabled = true);
+
+    }
+
+    public void Damage(HealthBase h){
         flashColor.ForEach(i => i.Flash());
     }
     
     public void Damage(float damage, Vector3 dir){
         
-        Damage(damage);
+       // Damage(damage);
     }
 
     void Update(){
@@ -66,6 +108,13 @@ public class Player : MonoBehaviour
         else
         {
             animator.SetBool("Run", false);
+        }
+    }
+
+    [NaughtyAttributes.Button]
+    public void Respawn(){
+        if(CheckpointManager.Instance.HasCheckpoint()){
+            transform.position = CheckpointManager.Instance.GetPositionFromLastCheckpoint();
         }
     }
 }
