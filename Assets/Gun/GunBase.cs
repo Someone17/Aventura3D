@@ -42,7 +42,7 @@ public class GunBase : MonoBehaviour
         projectile.transform.rotation = positionToShoot.rotation;
         projectile.speed = speed;
 
-        Shaker.Instance.Shake();
+        //Shaker.Instance.Shake();
     }
 
     private void PlaySoundSource(){
