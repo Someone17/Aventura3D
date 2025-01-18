@@ -8,6 +8,8 @@ public class BossCheck : MonoBehaviour
 
     public GameObject bossCamera;
 
+    public Color gizmoColor = Color.yellow;
+
     private void OnTriggerEnter(Collider other){
         if(other.transform.tag == tagToCheck){
             TurnCameraOn();
@@ -25,7 +27,7 @@ public class BossCheck : MonoBehaviour
 
 
     private void OnDrawGizmos(){
-        Gizmos.color = Color.yellow;
+        Gizmos.color = gizmoColor;
         Gizmos.DrawSphere(transform.position, transform.localScale.y);
     }
 

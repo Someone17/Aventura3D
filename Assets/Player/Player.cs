@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Ebac.Singleton;
 
-public class Player : MonoBehaviour
+public class Player : Singleton<Player>
 {
     public Animator animator;
 
@@ -33,7 +34,8 @@ public class Player : MonoBehaviour
         if(healthBase == null) healthBase = GetComponent<HealthBase>();
     }
 
-    public void Awake(){
+    protected override void Awake(){
+        base.Awake();
         OnValidate();
 
         healthBase.OnDamage += Damage;
